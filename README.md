@@ -1,6 +1,6 @@
 # SocketIO Arduino Client for Adafruit cc3000 instead of Ethernet Shield.
 
-This was based off Bill Roy’s Ehternet shield socket.io version which i then edited to support the Adafruit cc3000 board.
+This was based off Bill Roy’s Ethernet shield socket.io version which I then edited to support the Adafruit cc3000 board.
 
 
 Kevin's documentation is reproduced hereinafter, with changes as needed.
