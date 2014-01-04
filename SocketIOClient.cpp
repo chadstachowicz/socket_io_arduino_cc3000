@@ -81,26 +81,13 @@ void SocketIOClient::monitor(Adafruit_CC3000 cc3000) {
 	*databuffer = 0;
 
 	if (!client.connected()) {
-        ip = 0;
-        uint8_t timeoutRetry = 0;
-        while (ip == 0) {
-            if (!cc3000.getHostByName(hostname, &ip)){
-                timeoutRetry++;
-                if (timeoutRetry < 3)
-                {
-                    //                  wdt_reset();
-                }
-            }
-            delay(200);
-        }
-        unsigned long lastRead = millis();
-        do {
-            client = cc3000.connectTCP(ip, 80);
-        } while((!client.connected()) &&
-                ((millis() - lastRead) < 3000));
+        connect(cc3000, hostname, port);
 	}
 
-	if (!client.available()) return;
+	if (!client.available()){
+     //   Serial.println("sdfsdfsdf");
+        return;
+    }
 
 	char which;
 	while (client.available()) {
