@@ -269,17 +269,10 @@ void SocketIOClient::sendMessage(char *data) {
 }
 void SocketIOClient::sendEvent(char *event, char *data) {
 	client.print((char)0);
-    Serial.print((char)0);
 	client.print("5:::{\"name\":\"");
-    Serial.print("5:::{\"name\":\"");
     client.print(event);
-    Serial.print(event);
     client.print("\", \"args\":\"");
-    Serial.print("\", \"args\":\"");
 	client.print(data);
-    Serial.print(data);
     client.print("\"}");
-    Serial.print("\"}");
 	client.print((char)255);
-    Serial.print((char)255);
 }
