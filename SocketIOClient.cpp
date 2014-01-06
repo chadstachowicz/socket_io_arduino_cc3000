@@ -93,6 +93,7 @@ void SocketIOClient::monitor(Adafruit_CC3000 cc3000) {
 	while (client.available()) {
 		readLine();
 		dataptr = databuffer;
+        dataptr[strlen(dataptr)-1] = 0;
 		switch (databuffer[0]) {	
 
 		case '1':		// connect: []
@@ -116,25 +117,31 @@ void SocketIOClient::monitor(Adafruit_CC3000 cc3000) {
 		}
 
 		findColon(which);
-		dataptr += 2;
+        
+        //Print out entire buffer (with message)
+        
+     //   Serial.println(dataptr);
 
-		// handle backslash-delimited escapes
-		char *optr = databuffer;
-		while (*dataptr && (*dataptr != '"')) {
-			if (*dataptr == '\\') {
-				++dataptr;		// todo: this just handles "; handle \r, \n, \t, \xdd
-			}
-			*optr++ = *dataptr++;
-		}
-		*optr = 0;
+		// CARVE OUT EVENT NAME
+        
+       // dataptr += 2;
+	//	char *optr = databuffer;
+	//	while (*dataptr && (*dataptr != '"')) {
+	//		if (*dataptr == '\\') {
+	//			++dataptr;		// todo: this just handles "; handle \r, \n, \t, \xdd
+	//		}
+	//		*optr++ = *dataptr++;
+	//	}
+	//	*optr = 0;
 
 		//Serial.print("[");
-		//Serial.print(databuffer);
+	//	Serial.print(databuffer);
 		//Serial.print("]");
 
 		if (dataArrivedDelegate != NULL) {
 			dataArrivedDelegate(*this, databuffer);
 		}
+        
 	}
 }
 
@@ -150,8 +157,6 @@ void SocketIOClient::sendHandshake(char hostname[]) {
     client.fastrprint(F("\r\n"));
     
     //other headers
-   // client.fastrprint(F("User-Agent: Arduino\r\n"));
-   // client.fastrprint(F("Accept: *\r\n"));
     client.fastrprint(F("Origin: Arduino\r\n"));
     //end headers
     client.fastrprint(F("\r\n"));
@@ -219,6 +224,7 @@ bool SocketIOClient::readHandshake(Adafruit_CC3000 cc3000) {
             ((millis() - lastRead) < 3000));
 
 	Serial.println(F("Reconnected."));
+    wdt_reset();
 
 	client.print(F("GET /socket.io/1/websocket/"));
 	client.print(sid);
@@ -255,9 +261,25 @@ void SocketIOClient::readLine() {
 	*dataptr = 0;
 }
 
-void SocketIOClient::send(char *data) {
+void SocketIOClient::sendMessage(char *data) {
 	client.print((char)0);
 	client.print("3:::");
 	client.print(data);
 	client.print((char)255);
+}
+void SocketIOClient::sendEvent(char *event, char *data) {
+	client.print((char)0);
+    Serial.print((char)0);
+	client.print("5:::{\"name\":\"");
+    Serial.print("5:::{\"name\":\"");
+    client.print(event);
+    Serial.print(event);
+    client.print("\", \"args\":\"");
+    Serial.print("\", \"args\":\"");
+	client.print(data);
+    Serial.print(data);
+    client.print("\"}");
+    Serial.print("\"}");
+	client.print((char)255);
+    Serial.print((char)255);
 }

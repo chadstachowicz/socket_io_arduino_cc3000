@@ -28,6 +28,7 @@
 */
 #include "Arduino.h"
 #include <Adafruit_CC3000.h>
+#include <avr/wdt.h>
 #include "SPI.h"
 
 // Length of static data buffers
@@ -42,7 +43,8 @@ class SocketIOClient {
         void disconnect();
 		void monitor(Adafruit_CC3000 cc3000);
 		void setDataArrivedDelegate(DataArrivedDelegate dataArrivedDelegate);
-		void send(char *data);
+		void sendMessage(char *data);
+        void sendEvent(char *event, char *data);
 	private:
         void sendHandshake(char hostname[]);
         Adafruit_CC3000_Client client;
