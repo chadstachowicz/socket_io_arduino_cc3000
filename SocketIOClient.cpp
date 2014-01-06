@@ -85,7 +85,6 @@ void SocketIOClient::monitor(Adafruit_CC3000 cc3000) {
 	}
 
 	if (!client.available()){
-     //   Serial.println("sdfsdfsdf");
         return;
     }
 
@@ -271,8 +270,8 @@ void SocketIOClient::sendEvent(char *event, char *data) {
 	client.print((char)0);
 	client.print("5:::{\"name\":\"");
     client.print(event);
-    client.print("\", \"args\":\"");
+    client.print("\", \"args\":[\"");
 	client.print(data);
-    client.print("\"}");
+    client.print("\"]}");
 	client.print((char)255);
 }
