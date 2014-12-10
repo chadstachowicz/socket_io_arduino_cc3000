@@ -1,6 +1,6 @@
-# SocketIO Arduino Client for Adafruit CC3000
+# Socket.IO Arduino Client for Adafruit CC3000
 
-This was based off Bill Roy’s Ethernet shield socket.io version which I then edited to support the Adafruit cc3000 board.
+This was based off Bill Roy’s [Ethernet shield Socket.IO](https://github.com/billroy/socket.io-arduino-client) version which I then edited to support the Adafruit CC3000 board.
 
 Kevin's documentation is reproduced hereinafter, with changes as needed.
 
@@ -11,7 +11,7 @@ This library doesn't support every inch of the Websocket spec, most notably the 
 
 ## Installation instructions
 
-Clone this repo into your Arduino Sketchbook directory under libraries, then restart the Arduino IDE so that it notices the new library.  Now, under File\Examples you should see SocketIOClient.  
+Clone this repo into your Arduino Sketchbook directory under libraries, then restart the Arduino IDE so that it notices the new library. 
 
 ## How To Use This Library
 
