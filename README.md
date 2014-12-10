@@ -16,53 +16,75 @@ Clone this repo into your Arduino Sketchbook directory under libraries, then res
 ## How To Use This Library
 
 ```c
-#define WLAN_SSID       “ssid”           // cannot be longer than 32 characters!
-#define WLAN_PASS       “password”
-#define WLAN_SECURITY   WLAN_SEC_WPA2
+/**
+ * Includes
+ */
+#include <Adafruit_CC3000.h>
+#include <SocketIOClient.h>
+#include <SPI.h>
+#include "utility/debug.h"
+
+/**
+ * Network config
+ */
+#define WLAN_SSID "ssid"
+#define WLAN_PASS "password"
+#define WLAN_SECURITY WLAN_SEC_WPA2
+
+/**
+ * Pins
+ */
+#define ADAFRUIT_CC3000_IRQ   3
+#define ADAFRUIT_CC3000_VBAT  5
+#define ADAFRUIT_CC3000_CS    10
 
 Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT, SPI_CLOCK_DIV2); // you can change this clock speed
- 
+
 SocketIOClient client;
+
+void ondata(SocketIOClient client, char *data) {
+  Serial.println(F("Incoming data!"));
+  Serial.println(data);
+  Serial.println(F("----------"));
+}
 
 void setup() {
   InitializeCC30000();
+
   client.setDataArrivedDelegate(ondata);
-  if (!client.connect(cc3000, "smartgaragenode.herokuapp.com", 80)) {
+  if (!client.connect(cc3000, "example.com", 80)) {
     Serial.println(F("Not connected."));
   }
 }
 
 void loop() {
-  client.monitor();
-  client.send(“ping”);
+  client.monitor(cc3000);
+  client.sendMessage("ping");
   delay(2000);
 }
 
 void InitializeCC30000(void){
   // initialise the module
-  LogLine(F("\nInitializing..."));
-    
+  Serial.println(F("Initializing..."));
+
+  // initialize CC3000 chip
   if (!cc3000.begin()) {
-    LogLine(F("Couldn't begin()! Check your wiring?"));
+    Serial.println(F("Couldn't begin()! Check your wiring?"));
     while(1);
   }
-    
+
   // optional SSID scan
   if (!cc3000.connectToAP(WLAN_SSID, WLAN_PASS, WLAN_SECURITY)) {
-    LogLine(F("Failed!"));
+    Serial.println(F("Failed!"));
     while(1);
   }
-    
-  LogLine(F("Connected!"));
-  
-  // wait for DHCP to complete
-  LogLine(F("Request DHCP"));
-  while (!cc3000.checkDHCP()) {
-    delay(100); // ToDo: insert a DHCP timeout!
-  }  
-}
 
-void dataArrived(WebSocketClient client, char *data) {
-  Serial.println("Data Arrived: " + data);
+  Serial.println(F("Connected!"));
+
+  // wait for DHCP to complete
+  Serial.println(F("Request DHCP"));
+  while (!cc3000.checkDHCP()) {
+    delay(100);
+  }  
 }
 ```
