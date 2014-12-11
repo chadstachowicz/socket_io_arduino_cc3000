@@ -26,6 +26,10 @@
 	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 	OTHER DEALINGS IN THE SOFTWARE.
 */
+
+/**
+ * Includes
+ */
 #include "Arduino.h"
 #include <Adafruit_CC3000.h>
 #include <avr/wdt.h>
