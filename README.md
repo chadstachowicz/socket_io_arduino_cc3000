@@ -4,6 +4,8 @@ This was based off Bill Roy’s [Ethernet shield Socket.IO](https://github.com/b
 
 Kevin's documentation is reproduced hereinafter, with changes as needed.
 
+**This library only works with Socket.IO versions 9.x.x and below. There was a change in the protocol that makes it difficult to communicate with the new server. Fixes coming soon.**
+
 
 ## Caveats
 
@@ -59,7 +61,7 @@ void setup() {
 
 void loop() {
   client.monitor(cc3000);
-  client.sendMessage("ping");
+  client.sendEvent("info", "foobar");
   delay(2000);
 }
 
@@ -87,4 +89,27 @@ void InitializeCC30000(void){
     delay(100);
   }  
 }
+```
+
+An example Node server might look like:
+
+```js
+var io = require('socket.io');
+var express = require('express');
+
+var app = express(),
+    server = require('http').createServer(app),
+    io = io.listen(server);
+
+server.listen(80);
+
+io.sockets.on('connection', function (socket) {
+  socket.emit('yo', { hello: 'world' });
+  socket.on('info', function (data) {
+    console.log(data);
+  });
+});
+
+// serve HTML files in the `public` directory.
+app.use(express.static(__dirname + '/public'));
 ```
