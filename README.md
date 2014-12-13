@@ -91,6 +91,14 @@ void InitializeCC30000(void){
 }
 ```
 
+It should be fairly easy from then to communicate with the Node backend. Just run:
+
+```
+npm install socket.io@9.0 && npm install express@3.0
+```
+
+Though those might be the old versions of the libraries, they are the currently supported ones because of a Socket.IO protocol change in 1.0. You can try getting Express to work at version 4.0, but I have not tried to test it yet.
+
 An example Node server might look like:
 
 ```js
